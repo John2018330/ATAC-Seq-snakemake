@@ -11,15 +11,18 @@ This section contain a short project proposal that outlines
 Raw sequencing reads for the study's two ATAC-Seq replicates can be obtained from GEO accession (...).
 To perform quality assessment, [FastQC v(...)]() was used to inspect a number of quality metrics for each fastq file.
 [Trimmomatic v(...)]() was used in (paired-end/single-end) mode to quality filter and remove remaining adapter sequence from raw sequencing files.
+
 To perform read mapping, human genome reference GRChg38 was first indexed using [Bowtie2 v(...)]() `build` with default parameters.
 Using the index, post-trimmomatic sequencing reads were aligned to the reference using Bowtie2 and the `-X 2000` flag to increase max fragment length and enhance signal capture.
 [Samtools v(...)]() `flagstat` generated a report on each replicate alignment's quality, and these reports were combined with the FastQC reports with [MultiQC v(...)]() to generate a concatenated quality assessment report.
 Alignment files were sorted using Samtools `sort` and then filtered to remove any reads that aligned to the mitochondrial chromosome using Samtools `view`.
+
 To deal with tagmentation, [DeepTools v(...)]() `alignmentSieve` was used to filter alignments (_elaborate..._)
 To perform quality control on the fragment distribution sizes, Bioconductor package [ATACSeqQC v(...)]() in [R v(...)]() was used to generate a quality assessment report.
 Peak calling was performed using [MACS3 v(3..)]() with default parameters for each replicate.
 [BedTools v(...)]() `intersect` with flags `-r (..)` was used to generate a list of reproducible peaks, and to remove blacklisted regions.
 [HOMER v(...)]() `annotatePeaks` was used to annotate peaks with Gencode's v45 human reference annotation file (gtf).
+
 HOMER `findMotifsGenome.pl` performed motif analysis to analyze and present any recurring motifs in open chromatin regions.
 Gene enrichment analysis on annotated peaks was performed using Bioconductor package [fGSEA v(...)](). 
 R was used to generate a figure for deliverable #8
@@ -48,5 +51,9 @@ R was used to generate a figure for deliverable #8
 ## Misc Notes
 Filter mitochondrial chr reads:
 `samtools view -o sorted_no_chrM.bam -e 'rname != "chrM"' sorted_bam.bam`
+
+Deliverable #1: Fragment size distribution graph [here](https://bioconductor.org/packages/devel/bioc/vignettes/ATACseqQC/inst/doc/ATACseqQC.html#Fragment_size_distribution)
+
+Deliveralbe #7: Gene enrichment analysis: http://great.stanford.edu/public/html/
 
 
