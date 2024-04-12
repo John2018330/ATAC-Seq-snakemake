@@ -24,7 +24,7 @@ Peak calling was performed using [MACS3 v(3..)]() with default parameters for ea
 [HOMER v(...)]() `annotatePeaks` was used to annotate peaks with Gencode's v45 human reference annotation file (gtf).
 
 HOMER `findMotifsGenome.pl` performed motif analysis to analyze and present any recurring motifs in open chromatin regions.
-Gene enrichment analysis on annotated peaks was performed using Bioconductor package [fGSEA v(...)](). 
+Gene enrichment analysis on annotated peaks was performed using (Enrichr? David? GREAT?)
 R was used to generate a figure for deliverable #8
 
 ### Deliverables
