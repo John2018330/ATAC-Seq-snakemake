@@ -1,0 +1,26 @@
+#!/usr/bin/env python3
+
+### Imports ###
+import pandas
+
+
+### Global Settings and Variables ###
+SAMPLES     = ['ATACrep3', 'ATACrep4']
+READ_PAIRS  = ['R1', 'R2']
+RAW_READS   = expand('data/{sample}_{read}.fastq.gz', sample=SAMPLES, read=READ_PAIRS)
+
+
+
+
+
+### Includes ###
+include: "modules/qc.snake"
+
+
+
+### Rule all ###
+rule all:
+    input:
+        ## FastQC
+        expand('results/qc/fastqc/{sample}_{read}.fastqc.html', sample=SAMPLES, read=READ_PAIRS) 
+

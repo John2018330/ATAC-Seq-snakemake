@@ -1,0 +1,15 @@
+rule fastqc:
+    threads: 4
+    conda: 'envs/fastqc_env.yml'
+
+    input: 
+        'data/{fastq}.fastq.gz'
+
+    output:
+        'results/qc/fastqc/{fastq}.fastqc.html',
+        'results/qc/fastqc/{fastq}.fastqc.zip'
+
+    shell:
+        '''
+        fastqc -o results/qc/fastqc {input} -t {threads}
+        '''
