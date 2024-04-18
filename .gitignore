@@ -1,5 +1,7 @@
 /data/
+/.snakemake/
+/results/*
+/logs/*
 
-
-*snakejob*
+snakejob*
 
