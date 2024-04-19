@@ -1,7 +1,6 @@
 /data/
 /.snakemake/
-/results/*
-/logs/*
+/logs/*.log
 
 snakejob*
 
