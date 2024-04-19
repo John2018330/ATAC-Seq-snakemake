@@ -1,0 +1,33 @@
+rule trimmomatic:
+    threads:    4
+    conda:      '../envs/trimmomatic_env.yml'
+    log:        'logs/{fastq}_trimmomatic.log'
+
+    input:
+        'data/{fastq}.fastq.gz'
+
+    output:
+        'results/raw_reads_trimmed/{fastq}_trimmed.fastq.gz'
+
+    params:
+        read_type       = 'SE',
+        adapter_file	= '/projectnb/bf528/materials/project_2_chipseq/TruSeq3-SE.fa',
+        quality_score	= '-phred33',
+        leading         = 'LEADING:3',
+        trailing        = 'TRAILING:3',
+        slidingwindow   = 'SLIDINGWINDOW:4:15',
+        illuminaclip    = '2:30:10'
+
+    shell:
+        '''
+        trimmomatic {params.read_type} \
+            -threads {threads} \
+            -trimlog {log} \
+            {params.quality_score} \
+            {input} \
+            {output} \
+            ILLUMINACLIP:{params.adapter_file}:{params.illuminaclip} \
+            {params.leading} \
+            {params.trailing} \
+            {params.slidingwindow}
+        '''

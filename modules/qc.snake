@@ -1,5 +1,5 @@
 rule fastqc:
-    threads: 1
+    threads: 2
     conda: '../envs/fastqc_env.yml'
     log: 'logs/{fastq}.fastqc.log'
 
@@ -7,8 +7,9 @@ rule fastqc:
         'data/{fastq}.fastq.gz'
 
     output:
-        'results/qc/fastqc/{fastq}_fastqc.html',
-        'results/qc/fastqc/{fastq}_fastqc.zip'
+        multiext('results/qc/fastqc/{fastq}_fastqc', '.html', '.zip')
+        #'results/qc/fastqc/{fastq}_fastqc.html',
+        #'results/qc/fastqc/{fastq}_fastqc.zip'
 
     shell:
         '''

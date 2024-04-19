@@ -7,24 +7,21 @@ import pandas
 
 
 ### Global Settings and Variables ###
-SAMPLES     = ['ATACrep3', 'ATACrep4']
-READ_PAIRS  = ['R1', 'R2']
-RAW_READS   = expand('data/{sample}_{read}.fastq.gz', sample=SAMPLES, read=READ_PAIRS)
+# SAMPLES     = ['ATACrep3', 'ATACrep4']
+# READ_PAIRS  = ['R1', 'R2']
+# RAW_READS   = expand('data/{sample}_{read}.fastq.gz', sample=SAMPLES, read=READ_PAIRS)
 
 
 
 
 
 ### Includes ###
-include: "modules/qc.snake"
 include: "modules/all.snake"
-
+include: "modules/qc.snake"
+include: "modules/trimmomatic.snake"
 
 ### Rule all ###
 rule all:
     input:
         get_final_output() 
-
-        ## FastQC
-        #expand('results/qc/fastqc/{sample}_{read}.fastqc.html', sample=SAMPLES, read=READ_PAIRS) 
 

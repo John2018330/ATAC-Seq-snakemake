@@ -1,10 +1,22 @@
 #!/usr/bin/env python3
 
-SAMPLES     = ['ATACrep3', 'ATACrep4']
-READ_PAIRS  = ['R1', 'R2']
-RAW_READS   = expand('data/{sample}_{read}.fastq.gz', sample=SAMPLES, read=READ_PAIRS)
+SAMPLES         = ['ATACrep3', 'ATACrep4']
+READ_PAIRS      = ['R1', 'R2']
+RAW_READS_PATHS = expand('data/{sample}_{read}.fastq.gz', sample=SAMPLES, read=READ_PAIRS)
+SAMPLE_NAME     = expand('{sample}_{read_pair}', sample=SAMPLES, read_pair=READ_PAIRS)
 
 
 def get_final_output():
-    final_list = expand('results/qc/fastqc/{sample}_{read}_fastqc.html', sample=SAMPLES, read=READ_PAIRS)
+    final_list = []
+    
+    ### TRIMMOMATIC OUTPUT
+    final_list.append(expand('results/raw_reads_trimmed/{sample}_trimmed.fastq.gz', 
+        sample=SAMPLE_NAME))
+
+
+    ### FASTQC OUTPUT
+    final_list.append(expand('results/qc/fastqc/{sample}_{read}_fastqc.{ext}',
+        sample=SAMPLES, 
+        read=READ_PAIRS, 
+        ext=['html', 'zip']))
     return final_list
