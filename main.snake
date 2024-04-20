@@ -19,6 +19,7 @@ import pandas
 include: "modules/all.snake"
 include: "modules/qc.snake"
 include: "modules/trimmomatic.snake"
+include: "modules/bowtie2.snake"
 
 ### Rule all ###
 rule all:

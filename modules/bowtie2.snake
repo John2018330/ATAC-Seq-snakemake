@@ -1,0 +1,21 @@
+### Insert description of index building rule
+rule bowtie2_build:
+    threads: 16
+    conda: '../envs/bowtie2_env.yml'
+    log: 'logs/bowtie2_build.log'
+
+    input:
+        'resources/GRCh38.primary_assembly.genome.fa.gz'
+
+    output:
+        touch('resources/GRCh38_index/bowtie2_build.done')
+
+    params:
+        index_name  = 'GRCh38',
+        outdir = directory('resources/GRCh38_index')
+
+    shell:
+        '''
+        mkdir -p {params.outdir}
+        bowtie2-build {input} {params.outdir}/{params.index_name} -p {threads} > {log} 2>&1
+        '''

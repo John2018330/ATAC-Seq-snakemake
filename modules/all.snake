@@ -8,6 +8,9 @@ SAMPLE_NAME     = expand('{sample}_{read_pair}', sample=SAMPLES, read_pair=READ_
 
 def get_final_output():
     final_list = []
+    ### BOWTIE2 BUILD
+    final_list.append('resources/GRCh38_index/bowtie2_build.done')
+    
     
     ### TRIMMOMATIC OUTPUT
     final_list.append(expand('results/raw_reads_trimmed/{sample}_trimmed.fastq.gz', 
@@ -19,4 +22,6 @@ def get_final_output():
         sample=SAMPLES, 
         read=READ_PAIRS, 
         ext=['html', 'zip']))
+
+
     return final_list
