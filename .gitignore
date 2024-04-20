@@ -1,4 +1,3 @@
-/data/
 /.snakemake/
 /logs/*.log
 
