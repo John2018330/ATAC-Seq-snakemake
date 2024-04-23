@@ -6,6 +6,8 @@ RAW_READS_PATHS = expand('data/{sample}_{read}.fastq.gz', sample=SAMPLES, read=R
 SAMPLE_NAME     = expand('{sample}_{read_pair}', sample=SAMPLES, read_pair=READ_PAIRS)
 
 
+
+### Function for generating list of files for rule all
 def get_final_output():
     final_list = []
 
@@ -37,3 +39,20 @@ def get_final_output():
 
 
     return final_list
+
+
+
+### Function for generating list of qc reports to concatenate
+#   with MultiQC
+def get_qc_reports():
+    qc_reports = []
+
+    ### FastQC reports
+    qc_reports.append(expand('results/qc/fastqc/{sample}_fastqc.zip',
+        sample=SAMPLE_NAME))
+
+    ### Samtools Flagstat reports
+    qc_reports.append(expand('results/qc/flagstats/{sample}.stats',
+        sample=SAMPLE_NAME))
+        
+    return qc_reports
