@@ -8,20 +8,32 @@ SAMPLE_NAME     = expand('{sample}_{read_pair}', sample=SAMPLES, read_pair=READ_
 
 def get_final_output():
     final_list = []
-    ### BOWTIE2 BUILD
-    final_list.append('resources/GRCh38_index/bowtie2_build.done')
-    
-    
+
+    ### FASTQC OUTPUT
+    final_list.append(expand('results/qc/fastqc/{sample}_fastqc.{ext}',
+        sample=SAMPLE_NAME,
+        ext=['html', 'zip']))
+
+
     ### TRIMMOMATIC OUTPUT
-    final_list.append(expand('results/raw_reads_trimmed/{sample}_trimmed.fastq.gz', 
+    #final_list.append(expand('results/raw_reads_trimmed/{sample}_trimmed.fastq.gz', 
+    #    sample=SAMPLE_NAME))
+
+
+    ### BOWTIE2 BUILD
+    #final_list.append('logs/bowtie2_build.done')
+    
+
+    ### BOWTIE2 ALIGNMENT OUTPUTS (requires trimmomatic output)
+    final_list.append(expand('results/bowtie2_alignments/{sample}.bam',
+        sample=SAMPLE_NAME))
+    
+
+    ### SAMTOOLS FLAGSTAT
+    final_list.append(expand('results/qc/flagstats/{sample}.stats',
         sample=SAMPLE_NAME))
 
 
-    ### FASTQC OUTPUT
-    final_list.append(expand('results/qc/fastqc/{sample}_{read}_fastqc.{ext}',
-        sample=SAMPLES, 
-        read=READ_PAIRS, 
-        ext=['html', 'zip']))
 
 
     return final_list

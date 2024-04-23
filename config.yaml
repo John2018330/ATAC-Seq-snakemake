@@ -1,0 +1,35 @@
+# This is a config file to edit parameters of the pipeline and 
+# the pipeline's rules
+
+
+# Trimmomatic Parameters for raw read trimming and quality control
+trimmomatic:
+    # Specify Read Type (paired end not actually implemented)
+    read_type:      'SE'
+
+    # Path to fasta file containing adapter sequences to remove in raw sequencing reads
+    adapter_file:   '/projectnb/bf528/materials/project_2_chipseq/TruSeq3-SE.fa'
+
+    # Quality score metric 
+    quality_score:  '-phred33'
+
+    # Basepair filtering by position and quality
+    leading:        'LEADING:3'
+    trailing:       'TRAILING:3'
+    slidingwindow:  'SLIDINGWINDOW:4:15'
+    illuminaclip:   '2:30:10' 
+
+
+# Bowtie 2 parameters for genome building and aligning
+bowtie2:
+    # Directory to put index into
+    index_folder:       'resources/GRCh38_index'
+
+    # Index Path: includes reference to index for bowtie
+    index_path:         'resources/GRCh38_index/GRCh38'  
+
+    # (BUILD): name of index to build
+    index_name:         'GRCh38'
+
+    # (ALIGN): Maximum fragment length 
+    max_frag_length:    '2000'

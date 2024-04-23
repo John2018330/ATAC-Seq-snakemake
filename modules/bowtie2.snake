@@ -1,4 +1,4 @@
-### Insert description of index building rule
+# Used to build an index for a genome fasta
 rule bowtie2_build:
     threads: 16
     conda: '../envs/bowtie2_env.yml'
@@ -8,14 +8,40 @@ rule bowtie2_build:
         'resources/GRCh38.primary_assembly.genome.fa.gz'
 
     output:
-        touch('resources/GRCh38_index/bowtie2_build.done')
+        touch('logs/bowtie2_build.done')
 
     params:
-        index_name  = 'GRCh38',
-        outdir = directory('resources/GRCh38_index')
+        index_name      = config['bowtie2']['index_name'],
+        index_folder    = directory(config['bowtie2']['index_folder'])
 
     shell:
         '''
-        mkdir -p {params.outdir}
-        bowtie2-build {input} {params.outdir}/{params.index_name} -p {threads} > {log} 2>&1
+        mkdir -p {params.index_folder}
+        bowtie2-build {input} {params.index_folder}/{params.index_name} \
+                -p {threads} \
+                > {log} 2>&1
+        '''
+
+
+# Used to align sequencing reads to a genome fasta using the built index (previous rule)
+# NOTE: bowtie2 produces sam, use samtools to convert to bam automatically
+rule bowtie2_align:
+    threads: 16
+    conda: '../envs/bowtie2_env.yml'
+    log: 'logs/bowtie2_align_{fastq}.log'
+
+    input:
+       fastq            = 'results/raw_reads_trimmed/{fastq}_trimmed.fastq.gz',
+       index_check      = 'logs/bowtie2_build.done'
+
+    output:
+        bam             = 'results/bowtie2_alignments/{fastq}.bam'
+
+    params:
+        index_path      = config['bowtie2']['index_path'],
+        max_frag_length = config['bowtie2']['max_frag_length']
+
+    shell:
+        '''
+        bowtie2 -p {threads} -x {params.index_path} -U {input.fastq} -X {params.max_frag_length} 2> {log} | samtools view -bS - > {output.bam}
         '''

@@ -3,23 +3,16 @@
 ### Imports ###
 import pandas
 
-
-
-
-### Global Settings and Variables ###
-# SAMPLES     = ['ATACrep3', 'ATACrep4']
-# READ_PAIRS  = ['R1', 'R2']
-# RAW_READS   = expand('data/{sample}_{read}.fastq.gz', sample=SAMPLES, read=READ_PAIRS)
-
-
-
+### Load in config file
+configfile: "config.yaml"
 
 
 ### Includes ###
 include: "modules/all.snake"
-include: "modules/qc.snake"
+include: "modules/fastqc.snake"
 include: "modules/trimmomatic.snake"
 include: "modules/bowtie2.snake"
+include: "modules/samtools_flagstat.snake"
 
 ### Rule all ###
 rule all:
