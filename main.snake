@@ -8,7 +8,7 @@ configfile: "config.yaml"
 
 
 ### Includes ###
-include: "modules/all.snake"
+include: "modules/helpers.snake"
 include: "modules/fastqc.snake"
 include: "modules/trimmomatic.snake"
 include: "modules/bowtie2.snake"
