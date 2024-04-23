@@ -1,0 +1,14 @@
+rule samtools_flagstats:
+  conda: '../envs/samtools_env.yml'
+  log: 'logs/samtools_flagstat_{sample}.log'
+
+  input:
+      bam         = 'results/bowtie2_alignments/{sample}.bam'
+
+  output:
+      flagstat    = 'results/qc/flagstats/{sample}.stats'
+
+  shell:
+      '''
+      samtools flagstats {input} > {output}
+      '''
