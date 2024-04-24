@@ -1,13 +1,17 @@
 rule trimmomatic:
     threads:    4
     conda:      '../envs/trimmomatic_env.yml'
-    log:        'logs/{fastq}_trimmomatic.log'
+    log:        'logs/trimmomatic_{sample}.log'
 
     input:
-        'data/{fastq}.fastq.gz'
+        r1              = 'data/{sample}_R1.fastq.gz',
+        r2              = 'data/{sample}_R2.fastq.gz'
 
     output:
-        'results/raw_reads_trimmed/{fastq}_trimmed.fastq.gz'
+        r1p             = 'results/raw_reads_trimmed/{sample}_r1p.fastq.gz',
+        r1u             = 'results/raw_reads_trimmed/{sample}_r1u.fastq.gz',
+        r2p             = 'results/raw_reads_trimmed/{sample}_r2p.fastq.gz',
+        r2u             = 'results/raw_reads_trimmed/{sample}_r2u.fastq.gz'
 
     params:
         read_type       = config['trimmomatic']['read_type'],
@@ -24,8 +28,8 @@ rule trimmomatic:
             -threads {threads} \
             -trimlog {log} \
             {params.quality_score} \
-            {input} \
-            {output} \
+            {input.r1} {input.r2} \
+            {output.r1p} {output.r1u} {output.r2p} {output.r2u} \
             ILLUMINACLIP:{params.adapter_file}:{params.illuminaclip} \
             {params.leading} \
             {params.trailing} \

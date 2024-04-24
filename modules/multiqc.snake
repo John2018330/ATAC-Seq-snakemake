@@ -1,0 +1,14 @@
+rule multiqc:
+  conda: '../envs/multiqc_env.yml'
+  log: 'logs/multiqc.log'
+
+  input:
+      get_qc_reports()
+
+  output:
+      concat_repot    = 'results/qc/multiqc_report.html'
+
+  shell:
+      '''
+      multiqc {input} -o results/qc/ -f > {log} 2>&1
+      '''

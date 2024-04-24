@@ -28,14 +28,17 @@ rule bowtie2_build:
 rule bowtie2_align:
     threads: 16
     conda: '../envs/bowtie2_env.yml'
-    log: 'logs/bowtie2_align_{fastq}.log'
+    log: 'logs/bowtie2_align_{sample}.log'
 
     input:
-       fastq            = 'results/raw_reads_trimmed/{fastq}_trimmed.fastq.gz',
+       r1p = 'results/raw_reads_trimmed/{sample}_r1p.fastq.gz',
+       r2p = 'results/raw_reads_trimmed/{sample}_r2p.fastq.gz',
+       r1u = 'results/raw_reads_trimmed/{sample}_r1u.fastq.gz',
+       r2u = 'results/raw_reads_trimmed/{sample}_r2u.fastq.gz',
        index_check      = 'logs/bowtie2_build.done'
 
     output:
-        bam             = 'results/bowtie2_alignments/{fastq}.bam'
+        bam             = 'results/bowtie2_alignments/{sample}.bam'
 
     params:
         index_path      = config['bowtie2']['index_path'],
@@ -43,5 +46,10 @@ rule bowtie2_align:
 
     shell:
         '''
-        bowtie2 -p {threads} -x {params.index_path} -U {input.fastq} -X {params.max_frag_length} 2> {log} | samtools view -bS - > {output.bam}
+        bowtie2 -p {threads} \
+                -x {params.index_path} \
+                -1 {input.r1p} \
+                -2 {input.r2p} \
+                -U {input.r1u},{input.r2u} \
+                -X {params.max_frag_length} 2> {log} | samtools view -bS - > {output.bam}
         '''

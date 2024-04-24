@@ -5,7 +5,7 @@
 # Trimmomatic Parameters for raw read trimming and quality control
 trimmomatic:
     # Specify Read Type (paired end not actually implemented)
-    read_type:      'SE'
+    read_type:      'PE'
 
     # Path to fasta file containing adapter sequences to remove in raw sequencing reads
     adapter_file:   '/projectnb/bf528/materials/project_2_chipseq/TruSeq3-SE.fa'

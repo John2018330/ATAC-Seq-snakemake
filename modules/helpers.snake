@@ -4,7 +4,7 @@ SAMPLES         = ['ATACrep3', 'ATACrep4']
 READ_PAIRS      = ['R1', 'R2']
 RAW_READS_PATHS = expand('data/{sample}_{read}.fastq.gz', sample=SAMPLES, read=READ_PAIRS)
 SAMPLE_NAME     = expand('{sample}_{read_pair}', sample=SAMPLES, read_pair=READ_PAIRS)
-
+TRIM_OUT        = ['r1p', 'r1u', 'r2p', 'r2u']
 
 
 ### Function for generating list of files for rule all
@@ -17,25 +17,28 @@ def get_final_output():
         ext=['html', 'zip']))
 
 
-    ### TRIMMOMATIC OUTPUT
-    #final_list.append(expand('results/raw_reads_trimmed/{sample}_trimmed.fastq.gz', 
-    #    sample=SAMPLE_NAME))
+    ### TRIMMOMATIC OUTPUT not needed
+    #final_list.append(expand('results/raw_reads_trimmed/{sample}_{trim_out}.fastq.gz', 
+    #    sample=SAMPLES,
+    #    trim_out=TRIM_OUT))
 
 
-    ### BOWTIE2 BUILD
+    ### BOWTIE2 BUILD not needed
     #final_list.append('logs/bowtie2_build.done')
     
 
-    ### BOWTIE2 ALIGNMENT OUTPUTS (requires trimmomatic output)
-    final_list.append(expand('results/bowtie2_alignments/{sample}.bam',
-        sample=SAMPLE_NAME))
+    ### BOWTIE2 ALIGNMENT OUTPUTS (requires trimmomatic output) not needed
+    #final_list.append(expand('results/bowtie2_alignments/{sample}.bam',
+    #    sample=SAMPLES))
     
 
-    ### SAMTOOLS FLAGSTAT
-    final_list.append(expand('results/qc/flagstats/{sample}.stats',
-        sample=SAMPLE_NAME))
+    ### SAMTOOLS FLAGSTAT not needed
+    #final_list.append(expand('results/qc/flagstats/{sample}.stats',
+    #    sample=SAMPLES))
 
 
+    ### MultiQC Output (requires part of fastqc and all of samtools flagstat output)
+    final_list.append('results/qc/multiqc_report.html')
 
 
     return final_list
@@ -53,6 +56,10 @@ def get_qc_reports():
 
     ### Samtools Flagstat reports
     qc_reports.append(expand('results/qc/flagstats/{sample}.stats',
-        sample=SAMPLE_NAME))
+        sample=SAMPLES))
         
     return qc_reports
+
+
+def get_replicates():
+    return SAMPLES
