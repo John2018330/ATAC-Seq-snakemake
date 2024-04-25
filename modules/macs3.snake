@@ -1,0 +1,21 @@
+rule macs3_hmmratac:
+    conda: '../envs/macs3_env.yml'
+    log: 'logs/macs3_hmmratac_{sample}.log'
+    threads: 4
+
+    input:
+        bam = 'results/deeptools/{sample}_sieved_sorted.bam'
+
+    output:
+        touch('logs/macs3_{sample}.done')
+    
+    params:
+        outdir = 'results/macs3'
+
+    shell:
+        '''
+        macs3 hmmratac -i {input.bam} \
+                -f BAMPE \
+                -n {wildcards.sample} \
+                --outdir {params.outdir} > {log} 2>&1
+        '''

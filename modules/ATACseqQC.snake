@@ -1,0 +1,18 @@
+rule ATACseqQC:
+    conda: '../envs/ATACSeqQC_env.yml'
+    log: 'logs/ATACseqQC_{sample}.log'
+
+    input:
+        bam     = 'results/deeptools/{sample}_sieved_sorted.bam',
+        index   = 'results/deeptools/{sample}_sieved_sorted.bam.bai'
+
+    output:
+        'results/{sample}.fragment.size.distribution.pdf'
+
+    params:
+        outdir  = 'results'
+
+    shell:
+        '''
+        Rscript scripts/ATACSeqQC.R {input.bam} {params.outdir} > {log} 2>&1
+        '''

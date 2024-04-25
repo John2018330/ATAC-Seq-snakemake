@@ -47,8 +47,26 @@ def get_final_output():
 
 
     ### Samtools Index output
-    final_list.append(expand('results/samtools/{sample}_noMT_sorted.bam.bai',
+    #final_list.append(expand('results/samtools/{sample}_noMT_sorted.bam.bai',
+    #    sample=SAMPLES))
+
+
+    ### DeepTools alignmentSieve
+    #final_list.append(expand('results/deeptools/{sample}_sieved.bam',
+    #    sample=SAMPLES))
+
+    ###
+    #final_list.append(expand('results/deeptools/{sample}_sieved_sorted.bam.bai',
+    #    sample=SAMPLES))
+
+    ### ATACseqQC output
+    final_list.append(expand('results/{sample}.fragment.size.distribution.pdf',
         sample=SAMPLES))
+
+    ### MACS3 Output
+    #final_list.append(expand('logs/macs3_{sample}.done',
+    #    sample=SAMPLES))
+
 
     return final_list
 

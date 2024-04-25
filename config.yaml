@@ -1,6 +1,9 @@
 # This is a config file to edit parameters of the pipeline and 
 # the pipeline's rules
 
+# Global Parameters
+blacklist_file:     'resources/hg38-blacklist.v2.bed'
+
 
 # Trimmomatic Parameters for raw read trimming and quality control
 trimmomatic:
@@ -33,3 +36,15 @@ bowtie2:
 
     # (ALIGN): Maximum fragment length 
     max_frag_length:    '2000'
+
+
+# DeepTools parameters for alignment processing
+deeptools:
+    # (ALIGNMENT SIEVE) Minimum fragment length needed for read/pair inclusions for filtering
+    # mono or di nucleosome fragments
+    minFragmentLength:  '0'
+
+    # (ALIGNMENT SIEVE) Maximum fragment length needed for read/pari inclusions for filtering
+    # mono or di nucleosome fragments
+    maxFragmentLength:  '0'
+

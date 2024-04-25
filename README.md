@@ -19,8 +19,8 @@ Using the index, post-trimmomatic sequencing reads were aligned to the reference
 Alignment files were sorted using Samtools `sort` and indexed using Samtools `index`.
 Reads that mapped to mitochondrial genome were removed for downstream analyses.
 
-To deal with tagmentation, [DeepTools v(...)]() `alignmentSieve` was used to filter alignments (_elaborate..._)
-To perform quality control on the fragment distribution sizes, Bioconductor package [ATACSeqQC v(...)]() in [R v(...)]() was used to generate a quality assessment report.
+To deal with tagmentation, [DeepTools v(...)]() `alignmentSieve` was used to filter alignments and shift them corresponding to the 9-bp duplication created by Tn5 transposase.
+To perform quality control and generate a plot on fragment distribution sizes, Bioconductor package [ATACSeqQC v(...)]() in [R v(...)]() was used.
 Peak calling was performed using [MACS3 v(3..)]() with default parameters for each replicate.
 [BedTools v(...)]() `intersect` with flags `-r (..)` was used to generate a list of reproducible peaks, and to remove blacklisted regions.
 [HOMER v(...)]() `annotatePeaks` was used to annotate peaks with Gencode's v45 human reference annotation file (gtf).

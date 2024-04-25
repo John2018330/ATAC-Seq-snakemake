@@ -1,0 +1,60 @@
+rule alignment_sieve:
+    conda: '../envs/deeptools_env.yml'
+    log: 'logs/deeptools_alignment_sieve_{sample}.log'
+    threads: 4
+
+    input:
+        bam             = 'results/samtools/{sample}_noMT_sorted.bam',
+        index           = 'results/samtools/{sample}_noMT_sorted.bam.bai'
+
+    output:
+        sieved          = 'results/deeptools/{sample}_sieved.bam' 
+
+    params:
+        blacklist       = config['blacklist_file'],
+        minFragLength   = config['deeptools']['minFragmentLength'],
+        maxFragLength   = config['deeptools']['maxFragmentLength']
+
+    shell:
+        '''
+        alignmentSieve -b {input.bam} -o {output.sieved} \
+                --numberOfProcessors {threads} \
+                --ATACshift \
+                --minFragmentLength {params.minFragLength} \
+                --maxFragmentLength {params.maxFragLength} \
+                --blackListFileName {params.blacklist} > {log} 2>&1
+        '''
+
+
+rule samtools_sort_sieved:
+    conda: '../envs/samtools_env.yml'
+    log: 'logs/samtools_sort_sieved_{sample}.log'
+    threads: 4
+
+    input:
+        sieved          = 'results/deeptools/{sample}_sieved.bam' 
+
+    output:
+        sieved_sorted   = 'results/deeptools/{sample}_sieved_sorted.bam'
+
+    shell:
+        '''
+        samtools sort {input.sieved} -o {output.sieved_sorted} --threads {threads} > {log} 2>&1
+        '''
+
+
+rule samtools_sieved_idx:
+    conda: '../envs/samtools_env.yml'
+    log: 'logs/samtools_idx_sieved_{sample}.log'
+    threads: 4
+
+    input:
+        sieved_sorted   = 'results/deeptools/{sample}_sieved_sorted.bam'
+
+    output:
+        sieved_index    = 'results/deeptools/{sample}_sieved_sorted.bam.bai'
+
+    shell:
+        '''
+        samtools index {input.sieved_sorted} -@ {threads} > {log} 2>&1
+        '''

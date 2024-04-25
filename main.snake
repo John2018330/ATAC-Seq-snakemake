@@ -15,6 +15,9 @@ include: "modules/bowtie2.snake"
 include: "modules/samtools_flagstat.snake"
 include: "modules/multiqc.snake"
 include: "modules/samtools.snake"
+include: "modules/deeptools.snake"
+include: "modules/ATACseqQC.snake"
+include: "modules/macs3.snake"
 
 
 ### Rule all ###
