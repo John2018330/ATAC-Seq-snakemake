@@ -1,0 +1,49 @@
+## Remove mitochondria genome alignments from bam
+rule samtools_rm_mt:
+    conda: '../envs/samtools_env.yml' 
+
+    input:
+        'results/bowtie2_alignments/{sample}.bam'
+
+    output:
+        'results/samtools/{sample}_noMT.bam'
+
+    shell:
+        '''
+        samtools view -h {input} | awk '($3 != "chrM" && $3 != "chrUn")' | samtools view -Shb - > {output}
+        '''
+
+## Sort and write bam to new file
+rule samtools_sort:
+    conda: '../envs/samtools_env.yml'
+    log: 'logs/samtools_sort_{sample}.log'
+    threads: 2
+
+    input:
+        bam         = 'results/samtools/{sample}_noMT.bam'
+
+    output:
+        sorted_bam  = 'results/samtools/{sample}_noMT_sorted.bam'
+
+    shell:
+        '''
+        samtools sort {input.bam} -o {output.sorted_bam} --threads {threads} > {log} 2>&1
+        '''
+
+
+## Write an index for the sorted bam
+rule samtools_idx:
+    conda: '../envs/samtools_env.yml'
+    log: 'logs/samtools_idx_{sample}.log'
+    threads: 2
+
+    input:
+        sorted_bam      = 'results/samtools/{sample}_noMT_sorted.bam'
+
+    output:
+        index           = 'results/samtools/{sample}_noMT_sorted.bam.bai'
+
+    shell:
+        '''
+        samtools index {input.sorted_bam} -@ {threads} > {log} 2>&1
+        '''

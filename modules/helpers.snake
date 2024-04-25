@@ -41,6 +41,15 @@ def get_final_output():
     final_list.append('results/qc/multiqc_report.html')
 
 
+    ### Samtools noMT Output
+    #final_list.append(expand('results/samtools/{sample}_noMT.bam',
+    #    sample=SAMPLES))
+
+
+    ### Samtools Index output
+    final_list.append(expand('results/samtools/{sample}_noMT_sorted.bam.bai',
+        sample=SAMPLES))
+
     return final_list
 
 

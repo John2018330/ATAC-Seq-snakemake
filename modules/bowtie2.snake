@@ -33,8 +33,6 @@ rule bowtie2_align:
     input:
        r1p = 'results/raw_reads_trimmed/{sample}_r1p.fastq.gz',
        r2p = 'results/raw_reads_trimmed/{sample}_r2p.fastq.gz',
-       r1u = 'results/raw_reads_trimmed/{sample}_r1u.fastq.gz',
-       r2u = 'results/raw_reads_trimmed/{sample}_r2u.fastq.gz',
        index_check      = 'logs/bowtie2_build.done'
 
     output:
@@ -50,6 +48,5 @@ rule bowtie2_align:
                 -x {params.index_path} \
                 -1 {input.r1p} \
                 -2 {input.r2p} \
-                -U {input.r1u},{input.r2u} \
                 -X {params.max_frag_length} 2> {log} | samtools view -bS - > {output.bam}
         '''

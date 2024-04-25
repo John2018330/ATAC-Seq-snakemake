@@ -14,6 +14,7 @@ include: "modules/trimmomatic.snake"
 include: "modules/bowtie2.snake"
 include: "modules/samtools_flagstat.snake"
 include: "modules/multiqc.snake"
+include: "modules/samtools.snake"
 
 
 ### Rule all ###
