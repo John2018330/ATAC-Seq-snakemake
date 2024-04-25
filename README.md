@@ -10,12 +10,14 @@ This section contain a short project proposal that outlines
 ### Methods
 Raw sequencing reads for the study's two ATAC-Seq replicates can be obtained from GEO accession (...).
 To perform quality assessment, [FastQC v(...)]() was used to inspect a number of quality metrics for each fastq file.
-[Trimmomatic v(...)]() was used in (paired-end/single-end) mode to quality filter and remove remaining adapter sequence from raw sequencing files.
+[Trimmomatic v(...)]() was used in paired-end mode to quality filter and remove remaining adapter sequence from raw sequencing files.
+Unpaired reads were discarded.
 
 To perform read mapping, human genome reference GRChg38 was first indexed using [Bowtie2 v(...)]() `build` with default parameters.
 Using the index, post-trimmomatic sequencing reads were aligned to the reference using Bowtie2 and the `-X 2000` flag to increase max fragment length and enhance signal capture.
 [Samtools v(...)]() `flagstat` generated a report on each replicate alignment's quality, and these reports were combined with the FastQC reports with [MultiQC v(...)]() to generate a concatenated quality assessment report.
-Alignment files were sorted using Samtools `sort` and then filtered to remove any reads that aligned to the mitochondrial chromosome using Samtools `view`.
+Alignment files were sorted using Samtools `sort` and indexed using Samtools `index`.
+Reads that mapped to mitochondrial genome were removed for downstream analyses.
 
 To deal with tagmentation, [DeepTools v(...)]() `alignmentSieve` was used to filter alignments (_elaborate..._)
 To perform quality control on the fragment distribution sizes, Bioconductor package [ATACSeqQC v(...)]() in [R v(...)]() was used to generate a quality assessment report.
