@@ -1,0 +1,41 @@
+rule intersect_peaks:
+    conda: '../envs/bedtools_env.yml'
+    log: 'logs/bedtools_intersect.log'
+
+    input:
+        rep3        = 'results/macs3/ATACrep3_peaks.narrowPeak',
+        rep4        = 'results/macs3/ATACrep4_peaks.narrowPeak'
+
+    output:
+        intersect   = 'results/bedtools/ATACpeaks.bed'
+
+    params:
+        overlap     = config['bedtools']['overlap']
+
+    shell:
+        '''
+        bedtools intersect -a {input.rep3} -b {input.rep4} \
+                -f {params.overlap} \
+                -r > {output.intersect}
+        '''
+
+
+rule filter_blacklist:
+    conda: '../envs/bedtools_env.yml'
+    log: 'logs/bedtools_filter_blacklist.log'
+    
+    input:
+        peaks               = 'results/bedtools/ATACpeaks.bed'
+
+    output:
+        intersect_filtered  = 'results/bedtools/ATACpeaks_noBlacklist.bed'
+
+    params:
+        blacklist           = config['blacklist_file']
+
+    shell:
+        '''
+        bedtools intersect -a {input.peaks} -b {params.blacklist} -v > {output.intersect_filtered}
+        '''
+
+

@@ -22,34 +22,27 @@ def get_final_output():
     #    sample=SAMPLES,
     #    trim_out=TRIM_OUT))
 
-
     ### BOWTIE2 BUILD not needed
     #final_list.append('logs/bowtie2_build.done')
     
-
     ### BOWTIE2 ALIGNMENT OUTPUTS (requires trimmomatic output) not needed
     #final_list.append(expand('results/bowtie2_alignments/{sample}.bam',
     #    sample=SAMPLES))
-    
 
     ### SAMTOOLS FLAGSTAT not needed
     #final_list.append(expand('results/qc/flagstats/{sample}.stats',
     #    sample=SAMPLES))
 
-
     ### MultiQC Output (requires part of fastqc and all of samtools flagstat output)
     final_list.append('results/qc/multiqc_report.html')
-
 
     ### Samtools noMT Output
     #final_list.append(expand('results/samtools/{sample}_noMT.bam',
     #    sample=SAMPLES))
 
-
     ### Samtools Index output
     #final_list.append(expand('results/samtools/{sample}_noMT_sorted.bam.bai',
     #    sample=SAMPLES))
-
 
     ### DeepTools alignmentSieve
     #final_list.append(expand('results/deeptools/{sample}_sieved.bam',
@@ -68,9 +61,19 @@ def get_final_output():
     #    sample=SAMPLES))
 
     ### MACS3 callpeaks output
-    final_list.append(expand('results/macs3/{sample}_peaks.narrowPeak',
-        sample=SAMPLES))
+    #final_list.append(expand('results/macs3/{sample}_peaks.narrowPeak',
+    #    sample=SAMPLES))
 
+    ### Bedtools Intersect output
+    #final_list.append('results/bedtools/ATACpeaks.bed')
+
+    ### Bedtools filter blacklist output
+    #final_list.append('results/bedtools/ATACpeaks_noBlacklist.bed')
+
+    ### Homer annotated peaks output
+    final_list.append('results/homer/ATACpeaks_noBlacklist_annotated.bed')
+
+    
 
     return final_list
 

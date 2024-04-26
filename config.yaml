@@ -3,7 +3,8 @@
 
 # Global Parameters
 blacklist_file:     'resources/hg38-blacklist.v2.bed'
-
+genome_fasta:       'resources/GRCh38.primary_assembly.genome.fa.gz'
+genome_annotation:  'resources/gencode.v45.primary_assembly.annotation.gtf.gz'
 
 # Trimmomatic Parameters for raw read trimming and quality control
 trimmomatic:
@@ -47,4 +48,11 @@ deeptools:
     # (ALIGNMENT SIEVE) Maximum fragment length needed for read/pari inclusions for filtering
     # mono or di nucleosome fragments
     maxFragmentLength:  '0'
+
+
+# Bedtools parameters for intersecting peaks
+bedtools:
+    # Intersect Overlap Requirement
+    overlap: '0.5'
+
 

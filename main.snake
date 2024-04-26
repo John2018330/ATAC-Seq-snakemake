@@ -18,6 +18,8 @@ include: "modules/samtools.snake"
 include: "modules/deeptools.snake"
 include: "modules/ATACseqQC.snake"
 include: "modules/macs3.snake"
+include: "modules/bedtools.snake"
+include: "modules/homer.snake"
 
 
 ### Rule all ###
