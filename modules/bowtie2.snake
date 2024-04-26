@@ -5,7 +5,7 @@ rule bowtie2_build:
     log: 'logs/bowtie2_build.log'
 
     input:
-        'resources/GRCh38.primary_assembly.genome.fa.gz'
+        config['genome_fasta']
 
     output:
         touch('logs/bowtie2_build.done')
