@@ -1,16 +1,16 @@
 rule macs3_hmmratac:
     conda: '../envs/macs3_env.yml'
     log: 'logs/macs3_hmmratac_{sample}.log'
-    threads: 4
+    threads: 16
 
     input:
-        bam = 'results/deeptools/{sample}_sieved_sorted.bam'
+        bam     = 'results/deeptools/{sample}_sieved_sorted.bam'
 
     output:
-        touch('logs/macs3_{sample}.done')
+        peaks   = 'results/macs3/{sample}_accessible_regions.gappedPeak'
     
     params:
-        outdir = 'results/macs3'
+        outdir  = 'results/macs3'
 
     shell:
         '''
@@ -18,4 +18,32 @@ rule macs3_hmmratac:
                 -f BAMPE \
                 -n {wildcards.sample} \
                 --outdir {params.outdir} > {log} 2>&1
+        '''
+
+
+rule macs3_callPeaks:
+    conda: '../envs/macs3_env.yml'
+    log: 'logs/macs3_callpeaks_{sample}.log'
+    threads: 8
+
+    input:
+        bam     = 'results/deeptools/{sample}_sieved_sorted.bam'
+
+    output:
+        touch('logs/macs3_callpeaks_{sample}.done')
+
+    params:
+        outdir  = 'results/macs3'
+
+    shell:
+        '''
+        macs3 callpeak \
+                -f BAMPE \
+                --call-summits \
+                -t {input.bam} \
+                -n {wildcards.sample} \
+                --outdir {params.outdir} \
+                -B \
+                -q 0.05 > {log} 2>&1
+
         '''

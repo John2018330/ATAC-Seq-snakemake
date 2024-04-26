@@ -63,9 +63,13 @@ def get_final_output():
     final_list.append(expand('results/{sample}.fragment.size.distribution.pdf',
         sample=SAMPLES))
 
-    ### MACS3 Output
+    ### MACS3 hmmratac Output
     #final_list.append(expand('logs/macs3_{sample}.done',
     #    sample=SAMPLES))
+
+    ### MACS3 callpeaks output
+    final_list.append(expand('results/macs3/{sample}_peaks.narrowPeak',
+        sample=SAMPLES))
 
 
     return final_list
