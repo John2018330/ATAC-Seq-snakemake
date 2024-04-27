@@ -1,0 +1,45 @@
+rule annotate_peaks:
+    conda: '../envs/homer_env.yml'
+    log: 'logs/annotate_peaks.log'
+
+    input:
+        bed     = 'results/bedtools/ATACpeaks_noBlacklist.bed',
+
+    output:
+        annotated_bed   = 'results/homer/ATACpeaks_noBlacklist_annotated.bed'
+
+    params:
+        genome          = config['genome_fasta'],
+        annotation      = config['genome_annotation']
+
+    shell:
+        '''
+        annotatePeaks.pl {input.bed} {params.genome} -gtf {params.annotation} > {output.annotated_bed}
+        '''
+
+
+rule find_motifs:
+    conda: '../envs/homer_env.yml'
+    log: 'logs/find_motifs.log'
+    threads: 8
+
+    input:
+        peaks   = 'results/homer/ATACpeaks_noBlacklist_annotated.bed'
+
+    output:
+        touch('logs/homer_motifs.done')
+    
+    params:
+        outdir  = 'results/homer/motifs',
+        genome  = config['genome_fasta_unzip'],
+        size    = config['homer']['motif_region_size']
+
+    shell:
+        '''
+        findMotifsGenome.pl {input.peaks} {params.genome} {params.outdir} \
+                -size {params.size} \
+                -S 10 \
+                -p {threads} \
+                -mask > {log} 2>&1
+
+        '''

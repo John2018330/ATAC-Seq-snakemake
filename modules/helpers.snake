@@ -71,9 +71,10 @@ def get_final_output():
     #final_list.append('results/bedtools/ATACpeaks_noBlacklist.bed')
 
     ### Homer annotated peaks output
-    final_list.append('results/homer/ATACpeaks_noBlacklist_annotated.bed')
+    #final_list.append('results/homer/ATACpeaks_noBlacklist_annotated.bed')
 
-    
+    ### Homer find motifs output
+    final_list.append('logs/homer_motifs.done')
 
     return final_list
 

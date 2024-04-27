@@ -4,7 +4,8 @@
 # Global Parameters
 blacklist_file:     'resources/hg38-blacklist.v2.bed'
 genome_fasta:       'resources/GRCh38.primary_assembly.genome.fa.gz'
-genome_annotation:  'resources/gencode.v45.primary_assembly.annotation.gtf.gz'
+genome_fasta_unzip: 'resources/GRCh38.primary_assembly.genome.fa'
+genome_annotation:  'resources/gencode.v45.primary_assembly.annotation.gtf'
 
 # Trimmomatic Parameters for raw read trimming and quality control
 trimmomatic:
@@ -55,4 +56,7 @@ bedtools:
     # Intersect Overlap Requirement
     overlap: '0.5'
 
-
+# HOMER rule parameters 
+homer:
+    # Region size for motif analysis
+    motif_region_size: '300'
