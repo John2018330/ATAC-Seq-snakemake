@@ -54,8 +54,8 @@ def get_final_output():
     #    sample=SAMPLES, nucleosome=ALL_NUCLEOSOMES))
 
     ### ATACseqQC output
-    #final_list.append(expand('results/{sample}.fragment.size.distribution.pdf',
-    #    sample=SAMPLES))
+    final_list.append(expand('results/{sample}_all.fragment.size.distribution.pdf',
+        sample=SAMPLES))
 
     ### MACS3 hmmratac Output
     #final_list.append(expand('logs/macs3_{sample}.done',

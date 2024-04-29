@@ -3,11 +3,11 @@ rule ATACseqQC:
     log: 'logs/ATACseqQC_{sample}.log'
 
     input:
-        bam     = 'results/deeptools/{sample}_sieved_sorted.bam',
-        index   = 'results/deeptools/{sample}_sieved_sorted.bam.bai'
+        bam     = 'results/deeptools/{sample}_all_sieved_sorted.bam',
+        index   = 'results/deeptools/{sample}_all_sieved_sorted.bam.bai'
 
     output:
-        'results/{sample}.fragment.size.distribution.pdf'
+        'results/{sample}_all.fragment.size.distribution.pdf'
 
     params:
         outdir  = 'results'
