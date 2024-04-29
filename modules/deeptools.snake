@@ -1,41 +1,44 @@
-rule alignment_sieve:
-    conda: '../envs/deeptools_env.yml'
-    log: 'logs/deeptools_alignment_sieve_{sample}.log'
-    threads: 4
+nucleosomes = ['all', 'nfr', 'mono', 'di']
+for nucleosome in nucleosomes:
+    rule alignment_sieve:
+        name: f"alignment_sieve_{nucleosome}"
+        conda: '../envs/deeptools_env.yml'
+        log: f"logs/deeptools_alignment_sieve_{{sample}}_{nucleosome}.log"
+        threads: 4
 
-    input:
-        bam             = 'results/samtools/{sample}_noMT_sorted.bam',
-        index           = 'results/samtools/{sample}_noMT_sorted.bam.bai'
+        input:
+            bam             = 'results/samtools/{sample}_noMT_sorted.bam',
+            index           = 'results/samtools/{sample}_noMT_sorted.bam.bai'
 
-    output:
-        sieved          = 'results/deeptools/{sample}_sieved.bam' 
+        output:
+            sieved          = f'results/deeptools/{{sample}}_{nucleosome}_sieved.bam' 
 
-    params:
-        blacklist       = config['blacklist_file'],
-        minFragLength   = config['deeptools']['minFragmentLength'],
-        maxFragLength   = config['deeptools']['maxFragmentLength']
+        params:
+            blacklist       = config['blacklist_file'],
+            minFragLength   = config['deeptools'][f'{nucleosome}']['minFragmentLength'],
+            maxFragLength   = config['deeptools'][f'{nucleosome}']['maxFragmentLength']
 
-    shell:
-        '''
-        alignmentSieve -b {input.bam} -o {output.sieved} \
-                --numberOfProcessors {threads} \
-                --ATACshift \
-                --minFragmentLength {params.minFragLength} \
-                --maxFragmentLength {params.maxFragLength} \
-                --blackListFileName {params.blacklist} > {log} 2>&1
-        '''
+        shell:
+            '''
+            alignmentSieve -b {input.bam} -o {output.sieved} \
+                    --numberOfProcessors {threads} \
+                    --ATACshift \
+                    --minFragmentLength {params.minFragLength} \
+                    --maxFragmentLength {params.maxFragLength} \
+                    --blackListFileName {params.blacklist} > {log} 2>&1
+            '''
 
 
 rule samtools_sort_sieved:
     conda: '../envs/samtools_env.yml'
-    log: 'logs/samtools_sort_sieved_{sample}.log'
-    threads: 4
+    log: 'logs/samtools_sort_sieved_{sample}_{nucleosome}.log'
+    threads: 2
 
     input:
-        sieved          = 'results/deeptools/{sample}_sieved.bam' 
+        sieved          = 'results/deeptools/{sample}_{nucleosome}_sieved.bam' 
 
     output:
-        sieved_sorted   = 'results/deeptools/{sample}_sieved_sorted.bam'
+        sieved_sorted   = 'results/deeptools/{sample}_{nucleosome}_sieved_sorted.bam'
 
     shell:
         '''
@@ -45,14 +48,14 @@ rule samtools_sort_sieved:
 
 rule samtools_sieved_idx:
     conda: '../envs/samtools_env.yml'
-    log: 'logs/samtools_idx_sieved_{sample}.log'
-    threads: 4
+    log: 'logs/samtools_idx_sieved_{sample}_{nucleosome}.log'
+    threads: 2
 
     input:
-        sieved_sorted   = 'results/deeptools/{sample}_sieved_sorted.bam'
+        sieved_sorted   = 'results/deeptools/{sample}_{nucleosome}_sieved_sorted.bam'
 
     output:
-        sieved_index    = 'results/deeptools/{sample}_sieved_sorted.bam.bai'
+        sieved_index    = 'results/deeptools/{sample}_{nucleosome}_sieved_sorted.bam.bai'
 
     shell:
         '''

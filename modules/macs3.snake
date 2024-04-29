@@ -4,7 +4,7 @@ rule macs3_hmmratac:
     threads: 16
 
     input:
-        bam     = 'results/deeptools/{sample}_sieved_sorted.bam'
+        bam     = 'results/deeptools/{sample}_all_sieved_sorted.bam'
 
     output:
         peaks   = 'results/macs3/{sample}_accessible_regions.gappedPeak'
@@ -27,10 +27,11 @@ rule macs3_callPeaks:
     threads: 8
 
     input:
-        bam     = 'results/deeptools/{sample}_sieved_sorted.bam'
+        bam     = 'results/deeptools/{sample}_all_sieved_sorted.bam'
 
     output:
-        touch('logs/macs3_callpeaks_{sample}.done')
+        #touch('logs/macs3_callpeaks_{sample}.done')
+        peaks   = 'results/macs3/{sample}_peaks.narrowPeak'
 
     params:
         outdir  = 'results/macs3'

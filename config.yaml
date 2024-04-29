@@ -42,13 +42,29 @@ bowtie2:
 
 # DeepTools parameters for alignment processing
 deeptools:
-    # (ALIGNMENT SIEVE) Minimum fragment length needed for read/pair inclusions for filtering
-    # mono or di nucleosome fragments
-    minFragmentLength:  '0'
+    ### ALIGNMENT SIEVE PARAMETERS FOR ALL NUCLEOSOME BOUND STATUS
+    all:
+        # (ALIGNMENT SIEVE) Minimum and maximum fragment length needed for read/pair inclusions for filtering for NFR
+        minFragmentLength:  '0'
+        maxFragmentLength:  '0'
 
-    # (ALIGNMENT SIEVE) Maximum fragment length needed for read/pari inclusions for filtering
-    # mono or di nucleosome fragments
-    maxFragmentLength:  '0'
+    nfr:
+        # (ALIGNMENT SIEVE) Minimum and maximum fragment length needed for read/pair inclusions for filtering for NFR
+        minFragmentLength:  '0'
+        maxFragmentLength:  '100'
+
+    mono:
+        # (ALIGNMENT SIEVE) Minimum and maximum fragment length needed for read/pair inclusions for filtering for Mononucleosomes
+        minFragmentLength:  '180'
+        maxFragmentLength:  '247'
+
+    di:
+        # (ALIGNMENT SIEVE) Minimum and maximum fragment length needed for read/pair inclusions for filtering for Dinucleosomes
+        minFragmentLength:  '315'
+        maxFragmentLength:  '473'
+
+    ### Compute Matrix parameter for how far (in basepairs) to scan up and downstream the point of interest
+    up_down_stream: '1000'
 
 
 # Bedtools parameters for intersecting peaks

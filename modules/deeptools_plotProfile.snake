@@ -1,0 +1,67 @@
+rule bam_compare:
+    conda: '../envs/deeptools_env.yml'
+    log: 'logs/deeptools_bamCompare_ATACreps_{nucleosome}.log'
+    threads: 16
+
+    input:
+        bam1    = 'results/deeptools/ATACrep3_{nucleosome}_sieved_sorted.bam',
+        bam2    = 'results/deeptools/ATACrep4_{nucleosome}_sieved_sorted.bam'
+
+    output:
+        bigwig  = 'results/plot_profile/ATACreps_{nucleosome}_sieved_sorted.bw'
+
+    shell:
+        '''
+        bamCompare -b1 {input.bam1} \
+            -b2 {input.bam2} \
+            -o {output.bigwig} \
+            --operation mean \
+            -of bigwig \
+            -bs 1 \
+            --normalizeUsing RPKM \
+            --scaleFactorsMethod None \
+            -p {threads} > {log} 2>&1
+        '''
+
+rule compute_matrix:
+    conda: '../envs/deeptools_env.yml'
+    log: 'logs/deeptools_computeMatrix_nucleosomes.log'
+    threads: 16
+
+    input:
+        regions         = 'resources/hg19_genes.bed',
+        nfr_bw          = 'results/plot_profile/ATACreps_nfr_sieved_sorted.bw',
+        mono_bw         = 'results/plot_profile/ATACreps_mono_sieved_sorted.bw',
+        di_bw           = 'results/plot_profile/ATACreps_di_sieved_sorted.bw'
+
+    output:
+        matrix          = 'results/plot_profile/ATACreps_nucleosomes_matrix.gz'
+
+    params:
+        up_down_stream  = config['deeptools']['up_down_stream']
+
+    shell:
+        '''
+        computeMatrix scale-regions \
+            -S {input.nfr_bw} {input.mono_bw} {input.di_bw} \
+            -R {input.regions} \
+            -o {output.matrix} \
+            -a {params.up_down_stream} -b {params.up_down_stream} \
+            -p {threads} > {log} 2>&1
+        '''
+
+
+rule plot_profile:
+    conda: '../envs/deeptools_env.yml' 
+    log: 'logs/deeptools_plotProfile.log'
+
+    input:
+        matrix  = 'results/plot_profile/ATACreps_nucleosomes_matrix.gz'
+
+    output:
+        plot    = 'results/plot_profile/nucleosome_signal_coverage.png'
+
+    shell:
+        '''
+        plotProfile -m {input.matrix} -o {output.plot} --perGroup
+        '''

@@ -5,7 +5,8 @@ READ_PAIRS      = ['R1', 'R2']
 RAW_READS_PATHS = expand('data/{sample}_{read}.fastq.gz', sample=SAMPLES, read=READ_PAIRS)
 SAMPLE_NAME     = expand('{sample}_{read_pair}', sample=SAMPLES, read_pair=READ_PAIRS)
 TRIM_OUT        = ['r1p', 'r1u', 'r2p', 'r2u']
-
+ALL_NUCLEOSOMES = ['all', 'nfr', 'mono', 'di']
+NUCLEOSOMES     = ['nfr', 'mono', 'di']
 
 ### Function for generating list of files for rule all
 def get_final_output():
@@ -45,36 +46,47 @@ def get_final_output():
     #    sample=SAMPLES))
 
     ### DeepTools alignmentSieve
-    #final_list.append(expand('results/deeptools/{sample}_sieved.bam',
-    #    sample=SAMPLES))
+    #final_list.append(expand('results/deeptools/{sample}_{nucleosome}_sieved.bam',
+    #    sample=SAMPLES, nucleosome=NUCLEOSOMES))
 
-    ###
-    #final_list.append(expand('results/deeptools/{sample}_sieved_sorted.bam.bai',
-    #    sample=SAMPLES))
+    ### Deeptools bam sorting and indexing
+    #final_list.append(expand('results/deeptools/{sample}_{nucleosome}_sieved_sorted.bam.bai',
+    #    sample=SAMPLES, nucleosome=ALL_NUCLEOSOMES))
 
     ### ATACseqQC output
-    final_list.append(expand('results/{sample}.fragment.size.distribution.pdf',
-        sample=SAMPLES))
+    #final_list.append(expand('results/{sample}.fragment.size.distribution.pdf',
+    #    sample=SAMPLES))
 
     ### MACS3 hmmratac Output
     #final_list.append(expand('logs/macs3_{sample}.done',
     #    sample=SAMPLES))
 
     ### MACS3 callpeaks output
-    #final_list.append(expand('results/macs3/{sample}_peaks.narrowPeak',
+    #final_list.append(expand('results/macs3/{sample}_all_peaks.narrowPeak',
     #    sample=SAMPLES))
 
     ### Bedtools Intersect output
-    #final_list.append('results/bedtools/ATACpeaks.bed')
+    #final_list.append('results/bedtools/ATACpeaks_all.bed')
 
     ### Bedtools filter blacklist output
-    #final_list.append('results/bedtools/ATACpeaks_noBlacklist.bed')
+    #final_list.append('results/bedtools/ATACpeaks_all_noBlacklist.bed')
 
     ### Homer annotated peaks output
-    #final_list.append('results/homer/ATACpeaks_noBlacklist_annotated.bed')
+    #final_list.append('results/homer/ATACpeaks_all_noBlacklist_annotated.bed')
 
     ### Homer find motifs output
     final_list.append('logs/homer_motifs.done')
+
+    ### Deeptools bam compare output
+    #final_list.append(expand('results/plot_profile/ATACreps_{nucleosome}_sieved_sorted.bw',
+    #    nucleosome=NUCLEOSOMES))
+
+    ### Deeptools compute matrix output
+    #final_list.append('results/plot_profile/ATACreps_nucleosomes_matrix.gz')
+
+    ### Deeptools plot Profile png output
+    final_list.append('results/plot_profile/nucleosome_signal_coverage.png')
+
 
     return final_list
 
