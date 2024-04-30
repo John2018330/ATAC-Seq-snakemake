@@ -4,8 +4,10 @@ rule bam_compare:
     threads: 16
 
     input:
-        bam1    = 'results/deeptools/ATACrep3_{nucleosome}_sieved_sorted.bam',
-        bam2    = 'results/deeptools/ATACrep4_{nucleosome}_sieved_sorted.bam'
+        bam1        = 'results/deeptools/ATACrep3_{nucleosome}_sieved_sorted.bam',
+        bam2        = 'results/deeptools/ATACrep4_{nucleosome}_sieved_sorted.bam',
+        bam1_index  = 'results/deeptools/ATACrep3_{nucleosome}_sieved_sorted.bam.bai',
+        bam2_index  = 'results/deeptools/ATACrep4_{nucleosome}_sieved_sorted.bam.bai',
 
     output:
         bigwig  = 'results/plot_profile/ATACreps_{nucleosome}_sieved_sorted.bw'

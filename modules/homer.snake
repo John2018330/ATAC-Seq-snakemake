@@ -21,7 +21,7 @@ rule annotate_peaks:
 rule find_motifs:
     conda: '../envs/homer_env.yml'
     log: 'logs/find_motifs.log'
-    threads: 8
+    threads: 16
 
     input:
         peaks   = 'results/homer/ATACpeaks_noBlacklist_annotated.bed'
