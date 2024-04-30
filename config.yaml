@@ -13,7 +13,7 @@ trimmomatic:
     read_type:      'PE'
 
     # Path to fasta file containing adapter sequences to remove in raw sequencing reads
-    adapter_file:   '/projectnb/bf528/materials/project_2_chipseq/TruSeq3-SE.fa'
+    adapter_file:   'resources/NexteraPE.fasta'
 
     # Quality score metric 
     quality_score:  '-phred33'

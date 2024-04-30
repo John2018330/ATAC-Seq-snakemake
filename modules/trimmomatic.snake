@@ -1,5 +1,5 @@
 rule trimmomatic:
-    threads:    4
+    threads:    8
     conda:      '../envs/trimmomatic_env.yml'
     log:        'logs/trimmomatic_{sample}.log'
 

@@ -26,7 +26,7 @@ rule bowtie2_build:
 # Used to align sequencing reads to a genome fasta using the built index (previous rule)
 # NOTE: bowtie2 produces sam, use samtools to convert to bam automatically
 rule bowtie2_align:
-    threads: 16
+    threads: 24
     conda: '../envs/bowtie2_env.yml'
     log: 'logs/bowtie2_align_{sample}.log'
 
