@@ -8,9 +8,11 @@ This section contain a short project proposal that outlines
 
 
 ### Methods
-Raw sequencing reads for the study's two ATAC-Seq replicates can be obtained from GEO accession (...).
-To perform quality assessment, [FastQC v(...)]() was used to inspect a number of quality metrics for each fastq file.
-[Trimmomatic v(...)]() was used in paired-end mode to quality filter and remove remaining adapter sequence from raw sequencing files.
+#### Raw Sequence Processing
+Raw sequencing reads for the study's two ATAC-Seq replicates (rep3, rep4) can be obtained from GEO accession (...).
+To perform quality assessment of raw sequencing reads, [FastQC v(...)]() was used to inspect a number of quality metrics for each fastq file.
+[Trimmomatic v(...)]() was used in paired-end mode to quality filter and remove remaining adapter sequence (NexteraPE-PE.fasta) from raw sequencing files.
+Custom Trimmomatic flags included `LEADING:3, TRAILING:3, SLIDINGWINDOW:4:15, ILLUMINACLILP:2:30:10`.
 Unpaired reads were discarded.
 
 To perform read mapping, human genome reference GRChg38 was first indexed using [Bowtie2 v(...)]() `build` with default parameters.
@@ -19,13 +21,26 @@ Using the index, post-trimmomatic sequencing reads were aligned to the reference
 Alignment files were sorted using Samtools `sort` and indexed using Samtools `index`.
 Reads that mapped to mitochondrial genome were removed for downstream analyses.
 
-To deal with tagmentation, [DeepTools v(...)]() `alignmentSieve` was used to filter alignments and shift them corresponding to the 9-bp duplication created by Tn5 transposase.
-To perform quality control and generate a plot on fragment distribution sizes, Bioconductor package [ATACSeqQC v(...)]() in [R v(...)]() was used.
+#### Peak Calling and Motif Analysis
+To deal with tagmentation, [DeepTools v(...)]() `alignmentSieve` was used with flags `--ATACshift` to filter alignments and shift them corresponding to the 9-bp duplication created by Tn5 transposase.
+To perform quality control and generate a plot on fragment distribution sizes, Bioconductor package [ATACSeqQC v(...)]() in a custom R script [R v(...)]() was used on the bams containing all fragment sizes.
 Peak calling was performed using [MACS3 v(3..)]() with default parameters for each replicate.
-[BedTools v(...)]() `intersect` with flags `-r (..)` was used to generate a list of reproducible peaks, and to remove blacklisted regions.
-[HOMER v(...)]() `annotatePeaks` was used to annotate peaks with Gencode's v45 human reference annotation file (gtf).
+[BedTools v(...)]() `intersect` with flags `-r (0.5)` was used to generate a list of reproducible peaks, and to remove blacklisted regions.
+[HOMER v(...)]() `annotatePeaks` was used to annotate peaks with Gencode's v45 human reference annotation file (gtf), and `findMotifsGenome` was used to perform motif analysis..
 
-HOMER `findMotifsGenome.pl` performed motif analysis to analyze and present any recurring motifs in open chromatin regions.
+#### Signal Coverage
+To generate signal coverage plots of nucleosome free regions (NFR) and nucleosome bound regions (mono-nucleosomes, di-nucleosome), `alignmentSieve` was also run with flags `--minFragmentLenght` and `--maxFragmentLength` with varying values. 
+For NFR, the maximum length was set to 100.
+For mononucleosomes, the basepair range of fragments was [180,247].
+For dinucleosomes, the basepair range of fragments was [315,473].
+All produced bams were re-sorted and re-indexed using Samtools.
+Each pair of bams (replicate 3, replicate 4) was combined using Deeptools `bamCompare` with flags `--operation mean --normalizeUsing RPKM --scaleFactorsMethod None -bs 10`. 
+This specifies the bams to be normalized by RPKM to account for differences in sequencing depth and to take the average signal for a bin size of 10.
+After merging bams, Deeptools `computeMatrix reference-point` was used to generate a signal coverage matrix of gene regions (hg38 downloaded from UCSC refseq table browser).
+Regions 1000 basepairs up and down stream of the center point were analyzed using the `-a` and `-b` flags.
+The matrix was used to generate a signal coverage plot using Deeptools `plot_profile`.
+
+#### Gene Enrichment
 Gene enrichment analysis on annotated peaks was performed using (Enrichr? David? GREAT?)
 R was used to generate a figure for deliverable #8
 
