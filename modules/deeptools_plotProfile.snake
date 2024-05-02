@@ -19,7 +19,7 @@ rule bam_compare:
             -o {output.bigwig} \
             --operation mean \
             -of bigwig \
-            -bs 1 \
+            -bs 10 \
             --normalizeUsing RPKM \
             --scaleFactorsMethod None \
             -p {threads} > {log} 2>&1

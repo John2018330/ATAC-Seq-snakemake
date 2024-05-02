@@ -7,7 +7,7 @@ rule ATACseqQC:
         index   = 'results/deeptools/{sample}_all_sieved_sorted.bam.bai'
 
     output:
-        'results/{sample}_all.fragment.size.distribution.pdf'
+        'results/{sample}_frag_size_dist.png'
 
     params:
         outdir  = 'results'
