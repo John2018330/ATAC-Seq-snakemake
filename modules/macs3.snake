@@ -45,6 +45,6 @@ rule macs3_callPeaks:
                 -n {wildcards.sample} \
                 --outdir {params.outdir} \
                 -B \
-                -q 0.05 > {log} 2>&1
-
+                --nolambda \
+                -q 0.01 > {log} 2>&1
         '''
