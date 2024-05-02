@@ -12,3 +12,18 @@ rule samtools_flagstats:
       '''
       samtools flagstats {input} > {output}
       '''
+
+rule samtools_noMT_flagstats:
+  conda: '../envs/samtools_env.yml'
+  log: 'logs/samtools_noMT_flagstat_{sample}.log'
+
+  input:
+      bam         = 'results/samtools/{sample}_noMT.bam'
+
+  output:
+      flagstat    = 'results/qc/flagstats/{sample}_noMT.stats'
+
+  shell:
+      '''
+      samtools flagstats {input} > {output}
+      '''
