@@ -87,6 +87,9 @@ def get_final_output():
     ### Deeptools plot Profile png output
     final_list.append('results/plot_profile/nucleosome_signal_coverage.png')
 
+    ### Regions Pie Chart
+    final_list.append('results/regions_pie_chart.png')
+
 
     return final_list
 

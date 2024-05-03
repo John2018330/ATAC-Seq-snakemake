@@ -21,6 +21,7 @@ include: "modules/ATACseqQC.snake"
 include: "modules/macs3.snake"
 include: "modules/bedtools.snake"
 include: "modules/homer.snake"
+include: "modules/regions_pie_chart.snake"
 
 
 ### Rule all ###

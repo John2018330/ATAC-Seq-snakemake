@@ -1,0 +1,17 @@
+rule regions_pie_chart:
+    conda: '../envs/R.yml'
+    log: 'logs/regions_pie_chart.log'
+
+    input:
+        annotated_bed   = 'results/homer/ATACpeaks_noBlacklist_annotated.bed'
+
+    output:
+        'results/regions_pie_chart.png'
+
+    params:
+        outdir  = 'results'
+
+    shell:
+        '''
+        Rscript scripts/regions_pie_chart.R {input.annotated_bed} {params.outdir} > {log} 2>&1
+        '''
