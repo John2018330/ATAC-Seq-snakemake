@@ -150,6 +150,15 @@ Many of these functions are involved in cellular maintenence and growth.
 
 
 ### 8. Proportion of accessible chromatin regions 
+\
+``` {r out.width="100%"}
+knitr::include_graphics("regions_pie_chart.png")
+```
+
+To get an idea of the proportion of different genomic region types being nucleosome free, we generate a pie chart using the annotated peaks file.
+Unsurprisingly, promoters and transcription start sites are observed to be open. 
+
+
 
 
 
