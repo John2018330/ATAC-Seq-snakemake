@@ -9,13 +9,59 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# BF528 Final Project
-
-## ATACSeq Pipeline
+# BF528 Final Project ATACSeq Pipeline
 
 ## Introduction
+ATAC-Seq is often used to assay regions of the genome that have open chromatin, operating under the assumption that open chromatin is related to the regulation of gene expression.
+The protocol takes advantage of Tn5 Transposase and it's ability to readily splice nucleosome-free (or any protein-free) DNA.
+These segments of DNA can be of varying length and patterns can be observed corresponding to the amount of DNA typically wrapped around a nucleosome.
+These segments are sequenced and computationally, ATAC-Seq operates very similarly to ChIP-Seq. 
+The raw reads are highly enriched at specific regions of the genome, specifically where chromatin is open, and these regions are turned into "peaks". 
+/
+In this project, we perform a number of ATAC-Seq analyses on data found from [this article](https://www.nature.com/articles/nmeth.2688) using a number of different software.
+The software and data are all linked together through a snakemake pipeline.
 
 ## Methods
+### Raw Sequence Processing
+Raw sequencing reads for the study's two ATAC-Seq replicates (rep3, rep4) can be obtained from GEO accession [GSE47753](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE47753).
+To perform quality assessment of raw sequencing reads, [FastQC 0.12.1](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/) was used to inspect a number of quality metrics for each fastq file.
+[Trimmomatic 0.39](http://www.usadellab.org/cms/?page=trimmomatic) was used in paired-end mode to quality filter and remove remaining adapter sequence (NexteraPE-PE.fasta) from raw sequencing files.
+Custom Trimmomatic flags included `LEADING:3, TRAILING:3, SLIDINGWINDOW:4:15, ILLUMINACLILP:2:30:10`.
+Unpaired reads were discarded.
+
+To perform read mapping, human genome reference GRChg38 was first indexed using [Bowtie 2.5.3](https://bowtie-bio.sourceforge.net/bowtie2/index.shtml) `build` with default parameters.
+Using the index, post-trimmomatic sequencing reads were aligned to the reference using Bowtie2 and the `-X 2000` flag to increase max fragment length and enhance signal capture.
+[Samtools 1.19.2](https://www.htslib.org/) `flagstat` generated a report on each replicate alignment's quality, and these reports were combined with the FastQC reports with [MultiQC 1.20](https://multiqc.info/) to generate a concatenated quality assessment report.
+Alignment files were sorted using Samtools `sort` and indexed using Samtools `index`.
+Reads that mapped to mitochondrial genome were removed for downstream analyses.
+
+### Peak Calling and Motif Analysis
+To deal with tagmentation, [Deeptools 3.5.4](https://deeptools.readthedocs.io/en/develop/) `alignmentSieve` was used with flags `--ATACshift` to filter alignments and shift them corresponding to the 9-bp duplication created by Tn5 transposase.
+To perform quality control and generate a plot on fragment distribution sizes, Bioconductor package [ATACSeqQC 1.28.0](https://www.bioconductor.org/packages/release/bioc/html/ATACseqQC.html) in a custom R script [R 4.3.1](https://www.r-project.org/) was used on the bams containing all fragment sizes.
+Peak calling was performed using [MACS3](https://github.com/macs3-project/MACS) with default parameters for each replicate.
+[BedTools 2.31.1](https://bedtools.readthedocs.io/en/latest/) `intersect` with flags `-r (0.5)` was used to generate a list of reproducible peaks, and to remove blacklisted regions.
+[HOMER 4.11](http://homer.ucsd.edu/homer/) `annotatePeaks` was used to annotate peaks with Gencode's v45 human reference annotation file (gtf), and `findMotifsGenome` was used to perform motif analysis..
+
+### Signal Coverage
+To generate signal coverage plots of nucleosome free regions (NFR) and nucleosome bound regions (mono-nucleosomes, di-nucleosome), Deeptools `alignmentSieve` was also run with flags `--minFragmentLenght` and `--maxFragmentLength` with varying values. 
+For NFR, the maximum length was set to 100.
+For mononucleosomes, the basepair range of fragments was [180,247].
+For dinucleosomes, the basepair range of fragments was [315,473].
+All produced bams were re-sorted and re-indexed using Samtools.
+Each pair of bams (replicate 3, replicate 4) was combined using Deeptools `bamCompare` with flags `--operation mean --normalizeUsing RPKM --scaleFactorsMethod None -bs 10`. 
+This specifies the bams to be normalized by RPKM to account for differences in sequencing depth and to take the average signal for a bin size of 10.
+After merging bams, Deeptools `computeMatrix reference-point` was used to generate a signal coverage matrix of gene regions (hg38 downloaded from UCSC refseq table browser).
+Regions 1000 basepairs up and down stream of the center point were analyzed using the `-a` and `-b` flags.
+The matrix was used to generate a signal coverage plot using Deeptools `plot_profile`.
+
+### Gene Enrichment
+Gene enrichment analysis on annotated peaks was performed using [DAVID Functional annotation](https://david.ncifcrf.gov/).
+A list of gene names was extracted from the annotate peaks files and uploaded to DAVID's functional annotation web browser.
+
+
+### Proportion of regions pie chart
+R was used to generate the figure for deliverable #8
+
 
 ## Results/Deliverables
 
@@ -156,8 +202,9 @@ knitr::include_graphics("regions_pie_chart.png")
 ```
 
 To get an idea of the proportion of different genomic region types being nucleosome free, we generate a pie chart using the annotated peaks file.
-Unsurprisingly, promoters and transcription start sites are observed to be open. 
-
+Expectedly, a large portion of nucleosome free regions tend to be promoters and transcription start sites (~40%).
+However, introns and intergenic regions make up a large portion of the resulting distribution as well, 32% and 23% respectively.
+Both of these types of regions may play roles in long-distance regulation of expression.
 
 
 
