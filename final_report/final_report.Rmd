@@ -60,12 +60,31 @@ A list of gene names was extracted from the annotate peaks files and uploaded to
 
 
 ### Proportion of regions pie chart
-R was used to generate the figure for deliverable #8
+R was used to generate the figure for deliverable #8 following [this](https://codingenes.wordpress.com/2012/04/25/making-pie-graph-annotations-from-homer-output/) online blog.
 
 
 ## Results/Deliverables
 
-For the ATAC-Seq project, there were 8 deliverables.
+For the ATAC-Seq project, there were 8 deliverables, labeled #1-#8. 
+
+### 0: Quality control and analysis
+\
+```{r out.width="80%"}
+knitr::include_graphics("general_statistics.png")
+```
+\
+These general statistics tell a lot about the two replicates we used from the original study.
+After alignment, the number of reads appears satisfactory for coverage across the whole genome at 100+M (ATACrep{3,4}).
+However, characteristic of ATAC-Seq, we see a high percentage of duplicate reads in the original raw read file paris (ATACrep{3,4}_R{1,2}). 
+This can also be seen with FastQC's duplication level figure, shown below.
+We know that Tn5 Transposase will cleave any nucleosome free DNA, and consequently mitochondrial DNA will be highly representated in the reads.
+Filtering out reads that mapped to the mitochondrial genome reduced the size of our library by a significant amount, to roughly 30-40 M reads (ATACrep{3,4}_noMT).
+
+```{r out.width="80%"}
+knitr::include_graphics("sequence_counts.png")
+```
+
+
 
 ### 1: Fragment length distribution plots
 
