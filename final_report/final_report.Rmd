@@ -72,7 +72,9 @@ For the ATAC-Seq project, there were 8 deliverables, labeled #1-#8.
 ```{r out.width="80%"}
 knitr::include_graphics("general_statistics.png")
 ```
+
 \
+
 These general statistics tell a lot about the two replicates we used from the original study.
 After alignment, the number of reads appears satisfactory for coverage across the whole genome at 100+M (ATACrep{3,4}).
 However, characteristic of ATAC-Seq, we see a high percentage of duplicate reads in the original raw read file paris (ATACrep{3,4}_R{1,2}). 
@@ -193,9 +195,10 @@ Ultimately, there were roughly ~32K reproducible peaks, and this bed file can be
 
 ### 6. Motif analysis on reproducible peaks
 \
-```{r out.width="100%"}
+```{r out.width="80%"}
 knitr::include_graphics("homer_known_results.png")
 ```
+
 \
 
 Homer's `findMotifsGenome.pl` identifies motifs found in the reproducible peak's sequences and reports them in the table shown above.
@@ -204,7 +207,7 @@ In our reproducible peaks, we see an enrichment of Interferon regulatory factor 
 
 ### 7. Gene Enrichment Analysis
 
-``` {r out.width="100%"}
+``` {r out.width="80%"}
 knitr::include_graphics("david_results.png")
 ```
 
@@ -216,7 +219,7 @@ Many of these functions are involved in cellular maintenence and growth.
 
 ### 8. Proportion of accessible chromatin regions 
 \
-``` {r out.width="100%"}
+``` {r out.width="80%"}
 knitr::include_graphics("regions_pie_chart.png")
 ```
 
