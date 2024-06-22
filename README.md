@@ -3,13 +3,13 @@ Author: Johnathan Zhang
 
 ## Project Proposal
 This section contain a short project proposal that outlines 
-(1) the bioinformatics workflow for processing ATAC-Seq data from (...), and
+(1) the bioinformatics workflow for processing ATAC-Seq data from [this article](https://www.nature.com/articles/nmeth.2688), and
 (2) a list of questions that this analyses will address and the project deliverables.
 
 
 ### Methods
 #### Raw Sequence Processing
-Raw sequencing reads for the study's two ATAC-Seq replicates (rep3, rep4) can be obtained from GEO accession (...).
+Raw sequencing reads for the study's two ATAC-Seq replicates (rep3, rep4) can be obtained from GEO accession [GSE47753](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE47753).
 To perform quality assessment of raw sequencing reads, [FastQC v(...)]() was used to inspect a number of quality metrics for each fastq file.
 [Trimmomatic v(...)]() was used in paired-end mode to quality filter and remove remaining adapter sequence (NexteraPE-PE.fasta) from raw sequencing files.
 Custom Trimmomatic flags included `LEADING:3, TRAILING:3, SLIDINGWINDOW:4:15, ILLUMINACLILP:2:30:10`.
