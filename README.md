@@ -1,6 +1,8 @@
 # BF528 Final Project: ATAC-Seq snakemake workflow
 Author: Johnathan Zhang
 
+**View final report in** `final_report/final_report.html`
+
 ## Project Proposal
 This section contain a short project proposal that outlines 
 (1) the bioinformatics workflow for processing ATAC-Seq data from [this article](https://www.nature.com/articles/nmeth.2688), and
