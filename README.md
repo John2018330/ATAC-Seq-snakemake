@@ -8,6 +8,18 @@ This section contain a short project proposal that outlines
 (1) the bioinformatics workflow for processing ATAC-Seq data from [this article](https://www.nature.com/articles/nmeth.2688), and
 (2) a list of questions that this analyses will address and the project deliverables.
 
+### Software
+- [ATACSeqQC 3.19](https://www.bioconductor.org/packages/release/bioc/html/ATACseqQC.html)
+- [BedTools 2.31.1](https://bedtools.readthedocs.io/en/latest/)
+- [Bowtie 2.5.3](https://bowtie-bio.sourceforge.net/bowtie2/index.shtml)
+- [DeepTools 3.5.4](https://deeptools.readthedocs.io/en/develop/)
+- [FastQC 0.12.1-0](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
+- [HOMER 4.11](http://homer.ucsd.edu/homer/)
+- [MACS3](https://github.com/macs3-project/MACS)
+- [MultiQC 1.20](https://multiqc.info/)
+- [R 4.3.1](https://www.r-project.org/)
+- [samtools 1.19.2](https://www.htslib.org/)
+- [Trimmomatic 0.39](http://www.usadellab.org/cms/?page=trimmomatic)
 
 ### Methods
 #### Raw Sequence Processing
